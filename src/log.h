@@ -1,14 +1,15 @@
 #ifndef LOG_H
 #define LOG_H
 #include <fstream>
+#include <string.h>
 #include <string>
 using namespace std;
 
 class Log {
   public:
-    Log(char* filename);
+    Log(string filename);
     ~Log();
-    void Write(char* logline);
+    void Write(string logline, char severity);
   private:
     ofstream m_stream;
 };

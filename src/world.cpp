@@ -82,8 +82,8 @@ void World::handleInput(Entity *mob, char c){
 		case '9':
 			this->moveMob(mob->getX()+1, mob->getY()-1, mob);
 			break;
-		case 'i':
-			log->Write("character i selected");
+		case ',':
+			log->Write("character , selected", 'I');
 			this->pickUp(mob);
 			break;
 	}

@@ -15,7 +15,6 @@ namespace roguelike
 
         public Tile getCell(int i, int j)
         {
-            // return grid.ElementAt(i).ElementAt(j);
             return grid[i, j];
         }
 

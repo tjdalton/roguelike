@@ -15,6 +15,7 @@ namespace roguelike
         public Item(char c)
         {
             icon = c;
+            description = "a murky red liquid";
         }
 
         public char getIcon()

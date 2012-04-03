@@ -71,33 +71,41 @@ namespace roguelike
             switch (c)
             {
                 case "1":
+                case "NumPad1":
                     moveMob(e.getX() - 1, e.getY() + 1, e);
                     break;
                 case "2":
                 case "DownArrow":
+                case "NumPad2":
                     moveMob(e.getX(), e.getY() + 1, e);
                     break;
                 case "3":
+                case "NumPad3":
                     moveMob(e.getX() + 1, e.getY() + 1, e);
                     break;
                 case "4":
                 case "LeftArrow":
+                case "NumPad4":
                     moveMob(e.getX() - 1, e.getY(), e);
                     break;
                 case "5":
                     break;
                 case "6":
                 case "RightArrow":
+                case "NumPad6":
                     moveMob(e.getX() + 1, e.getY(), e);
                     break;
                 case "7":
+                case "NumPad7":
                     moveMob(e.getX() - 1, e.getY() - 1, e);
                     break;
                 case "8":
                 case "UpArrow":
+                case "NumPad8":
                     moveMob(e.getX(), e.getY() - 1, e);
                     break;
                 case "9":
+                case "NumPad9":
                     moveMob(e.getX() + 1, e.getY() - 1, e);
                     break;
                 case "OemComma":

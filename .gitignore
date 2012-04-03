@@ -17,11 +17,15 @@ Thumbs.db
 *.cache
 *.ilk
 *.log
+*.sln
 [Bb]in
 [Dd]ebug*/
 *.lib
 *.sbr
+*.csproj
 obj/
+*.config
+Properties/
 [Rr]elease*/
 _ReSharper*/
 [Tt]est[Rr]esult*

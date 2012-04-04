@@ -18,24 +18,21 @@ namespace roguelike
             description = "a murky red liquid";
         }
 
-        public char getIcon()
+        public char Icon
         {
-            return icon;
+            get { return icon; }
+            set { icon = value; }
         }
 
-        public String getDescription()
+        public String Description
         {
-            return description;
+            get { return description; }
+            set { description = value; }
         }
-
-        public void setColour(ConsoleColor c)
+        public ConsoleColor Colour
         {
-            colour = c;
-        }
-
-        public ConsoleColor getColour()
-        {
-            return colour;
+            get { return colour; }
+            set { colour = value; }
         }
     }
 }

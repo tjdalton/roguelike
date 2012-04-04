@@ -22,7 +22,7 @@ namespace roguelike
             icon = c;
             x = 1;
             y = 1;
-            String tmp = generateId();
+            String tmp = GenerateId();
             inventory = new List<Item>();
             stats = new Dictionary<String, int>();
             //ids.push_front(tmp);
@@ -35,68 +35,55 @@ namespace roguelike
             stats.Add("CHA", 5);
         }
 
-        public char getIcon()
+        public char Icon
         {
-            return icon;
+            get { return icon; }
+            set { icon = value; }
         }
 
-        public ConsoleColor getColour()
+        public ConsoleColor Colour
         {
-            return colour;
+            get { return colour; }
+            set { colour = value; }
         }
 
-        public void setColour(ConsoleColor c)
+        public String Name
         {
-            colour = c;
+            get { return name; }
+            set { name = value; }
         }
 
-        public String getName()
+        public int X
         {
-            return name;
+            get { return x; }
+            set { x = value; }
         }
 
-        public void setName(String s)
+        public int Y
         {
-            name = s;
+            get { return y; }
+            set { y = value; }
         }
 
-        public void setX(int i)
-        {
-            x = i;
-        }
 
-        public void setY(int i)
-        {
-            y = i;
-        }
-
-        public int getX()
-        {
-            return x;
-        }
-
-        public int getY()
-        {
-            return y;
-        }
-
-        public void setBlank()
+        public void SetBlank()
         {
             icon = ' ';
         }
 
-        public void setPos(int i, int j)
+        public void SetPos(int i, int j)
         {
             x = i;
             y = j;
         }
 
-        public String getUniqueId()
+        public String UniqueId
         {
-            return uniqueId;
+            get { return uniqueId; }
         }
 
-        public String generateId()
+
+        public String GenerateId()
         {
             String output = "#";
             Random random = new Random();
@@ -107,12 +94,12 @@ namespace roguelike
             return output;
         }
 
-        public void addItem(Item i)
+        public void AddItem(Item i)
         {
             inventory.Add(i);
         }
 
-        public int getStat(String s)
+        public int GetStat(String s)
         {
             return stats[s];
         }

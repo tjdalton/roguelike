@@ -14,74 +14,85 @@ namespace roguelike
         private bool solid;
         private bool occupied;
 
-        public char getIcon()
+        public char Icon
         {
-            if (this.isOccupied())
-                return mob.getIcon();
-            else if (contents.Count != 0)
-                return contents.Peek().getIcon();
-            else if (this.isSolid())
-                return '#';
-            else
-                return '.';
-
+            get
+            {
+                if (this.Occupied)
+                    return mob.Icon;
+                else if (contents.Count != 0)
+                    return contents.Peek().Icon;
+                else if (this.Solid)
+                    return '#';
+                else
+                    return '.';
+            }
         }
 
-        public Queue<Item> getContents()
+        public Queue<Item> Contents
         {
-            return contents;
+            get { return contents; }
         }
 
-        public void setMob(Entity e){
-            mob = e;
-            occupied = true;
-        }
-
-        public ConsoleColor getColour()
+        public Entity Mob
         {
-            if (isOccupied())
-                return mob.getColour();
-            else if (contents.Count != 0)
-                return contents.Peek().getColour();
-            else
-                return ConsoleColor.Gray;
+            set
+            {
+                mob = value;
+                occupied = true;
+            }
+
+            get { return mob; }
         }
 
-        public bool isSolid(){
-            return solid;
+        public ConsoleColor Colour
+        {
+            get
+            {
+                if (this.Occupied)
+                    return mob.Colour;
+                else if (contents.Count != 0)
+                    return contents.Peek().Colour;
+                else
+                    return ConsoleColor.Gray;
+            }
         }
 
-        public void toggleSolid(){
+        public bool Solid
+        {
+            get { return solid; }
+        }
+        public void ToggleSolid()
+        {
             solid = !solid;
         }
-
-        public bool isOccupied(){
-            return occupied;
+        public bool Occupied
+        {
+            get { return occupied; }
         }
 
-        public void toggleOccupied(){
+        public void ToggleOccupied()
+        {
             occupied = !occupied;
         }
 
-        public void addContents(Item i){
+        public void AddContents(Item i)
+        {
             contents.Enqueue(i);
         }
 
-        public Tile(){
+        public Tile()
+        {
             contents = new Queue<Item>();
             solid = false;
-            occupied  = false;
+            occupied = false;
         }
 
-        public void removeMob()
+        public void RemoveMob()
         {
             mob = null;
             occupied = false;
         }
 
-        public Entity getMob()
-        {
-            return mob;
-        }
     }
 }

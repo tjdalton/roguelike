@@ -11,8 +11,9 @@ namespace roguelike
     {
         private Entity mob;
         Queue<Item> contents;
-        private bool solid;
-        private bool occupied;
+        public enum TileType { Floor = 46, Wall = 35, OpenDoor = 47, ClosedDoor = 43 };
+        private TileType type;
+
 
         public char Icon
         {
@@ -22,11 +23,36 @@ namespace roguelike
                     return mob.Icon;
                 else if (contents.Count != 0)
                     return contents.Peek().Icon;
-                else if (this.Solid)
-                    return '#';
                 else
-                    return '.';
+                    return (char)type;
             }
+        }
+
+        public TileType Type
+        {
+            set { type = value; }
+            get { return type; }
+        }
+
+        public String Description
+        {
+            get
+            {
+                String output = "";
+                if (this.Occupied && this.Mob.Icon != '@'){
+                    output = String.Concat(output,"You see: ", this.Mob.Description, " ");
+                }
+                if (contents.Count != 0)
+                {
+                    if (output == "")
+                        output = "You see: ";
+                    output = String.Concat(output, contents.Peek().Description, " ");
+                }
+                if (output.Length == 0)
+                    output = "You see nothing on the floor";
+                return output;
+            }
+
         }
 
         public Queue<Item> Contents
@@ -39,7 +65,6 @@ namespace roguelike
             set
             {
                 mob = value;
-                occupied = true;
             }
 
             get { return mob; }
@@ -60,20 +85,23 @@ namespace roguelike
 
         public bool Solid
         {
-            get { return solid; }
-        }
-        public void ToggleSolid()
-        {
-            solid = !solid;
+            get
+            {
+                if (type == TileType.Floor || type == TileType.OpenDoor)
+                    return false;
+                else
+                    return true;
+            }
         }
         public bool Occupied
         {
-            get { return occupied; }
-        }
-
-        public void ToggleOccupied()
-        {
-            occupied = !occupied;
+            get 
+            {
+                if (mob == null)
+                    return false;
+                else
+                    return true;
+            }
         }
 
         public void AddContents(Item i)
@@ -84,14 +112,12 @@ namespace roguelike
         public Tile()
         {
             contents = new Queue<Item>();
-            solid = false;
-            occupied = false;
+            type = TileType.Floor;
         }
 
         public void RemoveMob()
         {
             mob = null;
-            occupied = false;
         }
 
     }

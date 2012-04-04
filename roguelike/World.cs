@@ -11,7 +11,8 @@ namespace roguelike
         private Tile[,] grid = new Tile[20, 60];
         private Entity player;
         private List<Entity> mobs;
-        private Queue<String> msgQueue;
+        private static Queue<String> msgQueue;
+        private Game game;
 
         public Tile GetCell(int i, int j)
         {
@@ -24,8 +25,9 @@ namespace roguelike
             set { player = value; }
         }
 
-        public World()
+        public World(Game g)
         {
+            game = g;
             mobs = new List<Entity>();
             msgQueue = new Queue<String>();
             player = new Entity('@');
@@ -49,6 +51,18 @@ namespace roguelike
                 GetCell(e.Y, e.X).Mob = e;
                 Redraw(e);
             }
+
+            else if (!GetCell(j, i).Solid && GetCell(j, i).Occupied)
+            {
+                e.Fight(GetCell(j, i).Mob);
+                if (GetCell(j, i).Mob.Dead)
+                {
+                    AddMessage("You slay the " + GetCell(j, i).Mob.Name);
+                    mobs.Remove(GetCell(j, i).Mob);
+                    GetCell(j, i).RemoveMob();
+                    MoveMob(i, j, e);                 
+                }
+            }
         }
 
         public void Redraw(Entity e)
@@ -60,54 +74,92 @@ namespace roguelike
 
         }
 
-        public void HandleInput(Entity e, String c)
+        public void HandleInput(Entity e, ConsoleKeyInfo c)
         {
-            switch (c)
+            switch (c.Key)
             {
-                case "1":
-                case "NumPad1":
+                case ConsoleKey.NumPad1:
                     MoveMob(e.X - 1, e.Y + 1, e);
                     break;
-                case "2":
-                case "DownArrow":
-                case "NumPad2":
+                case ConsoleKey.DownArrow:
+                case ConsoleKey.NumPad2:
                     MoveMob(e.X, e.Y + 1, e);
                     break;
-                case "3":
-                case "NumPad3":
+                case ConsoleKey.NumPad3:
                     MoveMob(e.X + 1, e.Y + 1, e);
                     break;
-                case "4":
-                case "LeftArrow":
-                case "NumPad4":
+                case ConsoleKey.LeftArrow:
+                case ConsoleKey.NumPad4:
                     MoveMob(e.X - 1, e.Y, e);
                     break;
-                case "5":
+                case ConsoleKey.NumPad5:
                     break;
-                case "6":
-                case "RightArrow":
-                case "NumPad6":
+                case ConsoleKey.RightArrow:
+                case ConsoleKey.NumPad6:
                     MoveMob(e.X + 1, e.Y, e);
                     break;
-                case "7":
-                case "NumPad7":
+                case ConsoleKey.NumPad7:
                     MoveMob(e.X - 1, e.Y - 1, e);
                     break;
-                case "8":
-                case "UpArrow":
-                case "NumPad8":
+                case ConsoleKey.UpArrow:
+                case ConsoleKey.NumPad8:
                     MoveMob(e.X, e.Y - 1, e);
                     break;
-                case "9":
-                case "NumPad9":
+                case ConsoleKey.NumPad9:
                     MoveMob(e.X + 1, e.Y - 1, e);
                     break;
-                case "OemComma":
+                case ConsoleKey.OemComma:
                     PickUp(e);
+                    break;
+                case ConsoleKey.L:
+                    if (c.Modifiers != ConsoleModifiers.Shift)
+                    {
+                        AddMessage(GetCell(player.Y, player.X).Description);
+                    }
                     break;
             }
         }
-
+        public void HandleInput(Entity e, int c)
+        {
+            ConsoleKeyInfo tmp;
+            switch (c)
+            {
+                case 1:
+                    tmp = new ConsoleKeyInfo('\0',ConsoleKey.NumPad1,false,false,false);
+                    HandleInput(e, tmp);
+                    break;
+                case 2:
+                    tmp = new ConsoleKeyInfo('\0',ConsoleKey.NumPad2,false,false,false);
+                    HandleInput(e, tmp);
+                    break;
+                case 3:
+                    tmp = new ConsoleKeyInfo('\0',ConsoleKey.NumPad3,false,false,false);
+                    HandleInput(e, tmp);
+                    break;
+                case 4:
+                    tmp = new ConsoleKeyInfo('\0',ConsoleKey.NumPad4,false,false,false);
+                    HandleInput(e, tmp);
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    tmp = new ConsoleKeyInfo('\0',ConsoleKey.NumPad6,false,false,false);
+                    HandleInput(e, tmp);
+                    break;
+                case 7:
+                    tmp = new ConsoleKeyInfo('\0',ConsoleKey.NumPad7,false,false,false);
+                    HandleInput(e, tmp);
+                    break;
+                case 8:
+                   tmp = new ConsoleKeyInfo('\0',ConsoleKey.NumPad8,false,false,false);
+                    HandleInput(e, tmp);
+                    break;
+                case 9:
+                    tmp = new ConsoleKeyInfo('\0',ConsoleKey.NumPad9,false,false,false);
+                    HandleInput(e, tmp);
+                    break;
+            }
+        }
         public Entity GetMob(Entity e)
         {
             Entity tmp = null;
@@ -131,7 +183,7 @@ namespace roguelike
             Random random = new Random();
             foreach (Entity e in mobs)
             {
-                HandleInput(e, random.Next(1, 9).ToString());
+                HandleInput(e, random.Next(1, 9));
             }
             DisplayStats();
         }
@@ -164,23 +216,23 @@ namespace roguelike
             }
         }
 
-        public void AddMessage(String s)
+        static public void AddMessage(String s)
         {
             msgQueue.Enqueue(s);
         }
 
-        public void PopMessage()
+        static public void PopMessage()
         {
             if (!MsgEmpty())
                 msgQueue.Dequeue();
         }
 
-        public bool MsgEmpty()
+        static public bool MsgEmpty()
         {
             return msgQueue.Count == 0;
         }
 
-        public String ViewMessage()
+        static public String ViewMessage()
         {
             if (!MsgEmpty())
             {
@@ -191,8 +243,6 @@ namespace roguelike
                 return "";
             }
         }
-
-
 
     }
 }

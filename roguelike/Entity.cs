@@ -10,12 +10,15 @@ namespace roguelike
     {
         private char icon;
         private String name;
+        private String description;
         private String uniqueId;
         private int x;
         private int y;
         private List<Item> inventory;
         private Dictionary<String, int> stats;
         private ConsoleColor colour;
+        private int currentHP;
+        private int maxHP;
 
         public Entity(char c)
         {
@@ -25,6 +28,7 @@ namespace roguelike
             String tmp = GenerateId();
             inventory = new List<Item>();
             stats = new Dictionary<String, int>();
+            description = "an angry looking Orc";
             //ids.push_front(tmp);
             uniqueId = tmp;
             stats.Add("STR", 25);
@@ -33,8 +37,28 @@ namespace roguelike
             stats.Add("INT", 20);
             stats.Add("WIS", 14);
             stats.Add("CHA", 5);
+            maxHP = stats["CON"];
+            currentHP = maxHP;
         }
 
+        public void Fight(Entity e)
+        {
+            if (e.Icon != '@')
+            {
+                e.Damage(5);
+                World.AddMessage("You swing mightily at the " + e.Name);
+            }
+        }
+
+        public void Damage(int i)
+        {
+            currentHP -= i;
+        }
+
+        public bool Dead
+        {
+            get { return currentHP <= 0; }
+        }
         public char Icon
         {
             get { return icon; }
@@ -47,6 +71,11 @@ namespace roguelike
             set { colour = value; }
         }
 
+        public String Description
+        {
+            get { return description; }
+            set { description = value; }
+        }
         public String Name
         {
             get { return name; }
@@ -63,12 +92,6 @@ namespace roguelike
         {
             get { return y; }
             set { y = value; }
-        }
-
-
-        public void SetBlank()
-        {
-            icon = ' ';
         }
 
         public void SetPos(int i, int j)

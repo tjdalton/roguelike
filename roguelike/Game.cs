@@ -22,14 +22,14 @@ namespace roguelike
 
         public void InitWorld()
         {
-            world = new World();
+            world = new World(this);
             for (int i = 0; i < 20; i++)
             {
                 for (int j = 0; j < 60; j++)
                 {
                     if (i == 0 || j == 0 || i == 19 || j == 59)
                     {
-                        world.GetCell(i, j).ToggleSolid();
+                        world.GetCell(i, j).Type = Tile.TileType.Wall;
                     }
                 }
             }
@@ -42,10 +42,7 @@ namespace roguelike
             while (ch != "Q" && tmp.Modifiers != ConsoleModifiers.Shift)
             {
                 tmp = Console.ReadKey(true);
-                ch = tmp.KeyChar.ToString();
-                if (ch == "\0" || ch == ",")
-                    ch = tmp.Key.ToString();
-                world.HandleInput(world.Player, ch);
+                world.HandleInput(world.Player, tmp);
                 world.Tick();
                 if (ch != "Q" && tmp.Modifiers != ConsoleModifiers.Shift)
                 {
@@ -61,6 +58,7 @@ namespace roguelike
             world.Player.Colour = ConsoleColor.Cyan;
             Entity tmp = new Entity('o');
             tmp.Colour = ConsoleColor.Green;
+            tmp.Name = "Orc";
             tmp.SetPos(10, 10);
             world.GetCell(10, 10).Mob = tmp;
             world.AddMob(tmp);
@@ -73,16 +71,27 @@ namespace roguelike
 
         public void ProcessMessage()
         {
+            ClearConsole(20, 24, 0, 80);
             Console.ForegroundColor = ConsoleColor.White;
             for (int i = 0; i < 5; i++)
             {
-                Console.SetCursorPosition(i, 20);
-                Console.Write(world.ViewMessage());
-                world.PopMessage();
+                Console.SetCursorPosition(0, 20 + i);
+                Console.Write(World.ViewMessage());
+                World.PopMessage();
             }
             Console.ResetColor();
         }
-
+        public void ClearConsole(int startX, int endX, int startY, int endY)
+        {
+            for (int i = startX; i < endX; i++)
+            {
+                for (int j = startY; j < endY; j++)
+                {
+                    Console.SetCursorPosition(j, i);
+                    Console.Write(" ");
+                }
+            }
+        }
         public void PrintWorld()
         {
             for (int i = 0; i < 20; i++)
